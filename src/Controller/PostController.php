@@ -14,9 +14,7 @@ class PostController extends AbstractController
     #[Route('/')]
     public function index(): Response
     {
-        return $this->render('post/index.html.twig', [
-            "age" => 17 
-        ]);
+        return $this->render('post/index.html.twig');
     }
 
     #[Route('/post/new')]
@@ -26,7 +24,7 @@ class PostController extends AbstractController
         $form = $this->createForm(PostType::class, $post);
         $form ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($post);
+            //dump($post);
         }
         return $this->render('post/form.html.twig', [
             "post_form" => $form->createView()  
