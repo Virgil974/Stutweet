@@ -19,6 +19,7 @@
         "symfony/framework-bundle": "6.0.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/runtime": "6.0.*",
+        "symfony/security-bundle": "6.0.*",
         "symfony/security-csrf": "6.0.*",
         "symfony/twig-bundle": "6.0.*",
         "symfony/validator": "6.0.*",
@@ -78,8 +79,9 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "symfony/debug-bundle": "6.0.*",
-        "symfony/maker-bundle": "^1.50",
+        "symfony/maker-bundle": "*",
         "symfony/stopwatch": "6.0.*",
         "symfony/web-profiler-bundle": "6.0.*"
     }
