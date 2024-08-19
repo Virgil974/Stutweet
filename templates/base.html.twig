@@ -37,6 +37,13 @@
                             <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search">
                             <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
+                        {% if app.user %}
+                            Bienvenu 
+                            {{app.user.username}}
+                            <a href="/logout">Se déconnecter</a>
+                        {% else %}
+                            <a href="/login">Se connecter</a>
+                        {% endif %}
                     </div>
                 </div>
             </nav>
