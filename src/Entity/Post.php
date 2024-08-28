@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
@@ -22,6 +22,9 @@ class Post {
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $image = NULL;
+
+    #[ORM\Column(type: "datetime")]
+    private \DateTime $publishedAt;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\User", inversedBy: "posts")]
     #[ORM\JoinColumn(name:"user_id", referencedColumnName:"id", onDelete:"CASCADE")]
@@ -82,6 +85,30 @@ class Post {
     public function setUser($user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /*public function getPublishedAt(): ?string
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(?string $publishedAt): self
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }*/
+
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt($publishedAt): self
+    {
+        $this->publishedAt = $publishedAt;
 
         return $this;
     }

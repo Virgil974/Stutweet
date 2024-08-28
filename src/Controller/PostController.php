@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PostController extends AbstractController
 {
@@ -32,6 +33,7 @@ class PostController extends AbstractController
         $form ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setUser($this->getUser());
+            $post->setPublishedAt(new \DateTime());
             $em = $doctrine->getManager();
             $em->persist($post);
             $em->flush();
@@ -46,9 +48,15 @@ class PostController extends AbstractController
     public function update(Request $request, Post $post, ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->getUser() !== $post->getUser()) {
+            $this->addFlash("error", "Vous ne pouvez pas modifier une publication qui ne vous appartient pas.");
+            return $this->redirectToRoute("home");
+            //throw new AccessDeniedException("Vous n'avez pas accès à cette fonctionalité.");
+        }
         $form = $this->createForm(PostType::class, $post);
         $form ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            //$post->setPublishedAt(new \DateTime());
             $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute("home");
@@ -64,6 +72,11 @@ class PostController extends AbstractController
     public function delete(Post $post, ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->getUser() !== $post->getUser()) {
+            $this->addFlash("error", "Vous ne pouvez pas supprimer une publication qui ne vous appartient pas.");
+            return $this->redirectToRoute("home");
+            //throw new AccessDeniedException("Vous n'avez pas accès à cette fonctionalité.");
+        }
         $em = $doctrine->getManager();
         $em->remove($post);
         $em->flush();
@@ -74,6 +87,11 @@ class PostController extends AbstractController
     public function duplicate(Post $post, ManagerRegistry $doctrine): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->getUser() !== $post->getUser()) {
+            $this->addFlash("error", "Vous ne pouvez pas dupliquer une publication qui ne vous appartient pas.");
+            return $this->redirectToRoute("home");
+            //throw new AccessDeniedException("Vous n'avez pas accès à cette fonctionalité.");
+        }
         $copyPost = clone $post;
         $em = $doctrine->getManager();
         $em->persist($copyPost);
