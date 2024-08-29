@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Url;
@@ -32,10 +34,30 @@ class PostType extends AbstractType {
             ]
         ])
 
-        ->add("image", UrlType::class, [
+        /*->add("image", UrlType::class, [
             "label" => "URL de l'image",
             "required" => false,
             'constraints' => [new Url(['message' => "L'image doit être une URL valide "])],
+        ]);*/
+
+        ->add("image", FileType::class, [
+            "label" => "L'image",
+            "mapped" => false,
+            "required" => false,
+            'constraints' => [
+                new File([
+                    'maxSize' => '1024k',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/gif',
+                        'image/png',
+                        'image/svg+xml',
+                        'image/jpg',
+                        'image/webp',
+                    ],
+                    'mimeTypesMessage' => 'Veuillez proposer une image valide avec une taille max de 1024ko',
+                ])
+            ],
         ]);
     }
 
